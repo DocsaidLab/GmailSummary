@@ -1,5 +1,7 @@
 #!/bin/bash
 
+cd $HOME/workspace/GmailSummary
+
 project_name="albumentations"
 log_dir="logs"
 current_date=$(date '+%Y-%m-%d')
