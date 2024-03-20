@@ -15,7 +15,7 @@ mkdir -p $log_dir
     echo "Starting the script at $(date)"
 
     # 執行 Python 程式
-    python main.py --project_name $project_name --time_length 1 2>&1
+    $HOME/.pyenv/versions/3.8.18/envs/main/bin/python main.py --project_name $project_name --time_length 1 2>&1
 
     # 構造文件名
     file_name="$project_name-update-$current_date.md"

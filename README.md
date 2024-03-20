@@ -4,7 +4,9 @@
     <img src="./docs/title.jpg" width="800">
 </div>
 
-在日常生活中，我們經常會因為點擊了 GitHub 上的某個專案的 `Watch` 選項而開始收到該專案的活動更新郵件。這些更新包括但不限於 issue 回報、pull request (PR) 以及 bug 報告等。例如，我曾經遇到的情況如下：
+在日常生活中，我們經常會因為點擊了 GitHub 上的某個專案的 `Watch` 選項而開始收到該專案的活動更新郵件。這些更新包括但不限於 issue 回報、pull request (PR) 以及 bug 報告等。
+
+我簡單舉個例子，目前遇到的情況如下：
 
 - [**albumentations**](https://github.com/albumentations-team/albumentations): 大約每天收到 10 封郵件。
 - [**onnxruntime**](https://github.com/microsoft/onnxruntime): 每天則是高達 200 封。
