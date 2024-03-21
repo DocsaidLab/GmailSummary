@@ -1,75 +1,84 @@
+**[English](./README.md)** | [中文](./README_tw.md)
+
 # GmailSummary
+
+<p align="left">
+    <a href="./LICENSE"><img src="https://img.shields.io/badge/license-Apache%202-dfd.svg"></a>
+</p>
+
+## Introduction
 
 <div align="center">
     <img src="./docs/title.jpg" width="800">
 </div>
 
-在日常生活中，我們經常會因為點擊了 GitHub 上的某個專案的 `Watch` 選項而開始收到該專案的活動更新郵件。這些更新包括但不限於新功能的討論、issue 回報、pull request (PR) 以及 bug 報告等。
+In everyday life, we often start receiving activity update emails from a GitHub project after clicking the `Watch` option on it. These updates include, but are not limited to, discussions of new features, issue reports, pull requests (PRs), and bug reports, among others.
 
-簡單舉個例子，如果你 `Watch` 了 `albumentations` 和 `onnxruntime` 項目，然後採用 `All Activity` 的方式：
+For example, if you `Watch` the `albumentations` and `onnxruntime` projects and opt for `All Activity`:
 
-- [**albumentations**](https://github.com/albumentations-team/albumentations): 大約每天收到 10 封郵件。
-- [**onnxruntime**](https://github.com/microsoft/onnxruntime): 每天則是高達 200 封。
+- [**albumentations**](https://github.com/albumentations-team/albumentations): You might receive about 10 emails per day.
+- [**onnxruntime**](https://github.com/microsoft/onnxruntime): You could get up to 200 emails per day.
 
-我們可以想像，如果你還關注了其他 10 個項目，那麼你每天將會收到 1000 封郵件。
+Imagine if you're following 10 more projects, you could be receiving 1000 emails a day.
 
-我就想問：**真有人會一封不漏地閱讀這些郵件嗎？**
+One might wonder: **Does anyone actually read all these emails?**
 
-反正我不會，通常連看都不看就直接刪除了。
+I certainly don't. I usually delete them without even looking.
 
-因此，作為一名尋求效率（偷懶）的工程師，我開始思考如何解決這個問題。
+Therefore, as an engineer seeking efficiency (or laziness), I began contemplating a solution to this problem.
 
-## 目錄
+## Table of Contents
 
-- [解決方案](#解決方案)
-    - [1. 使用 Gmail API 獲取郵件](#1-使用-gmail-api-獲取郵件)
-    - [2. 下載並過濾郵件](#2-下載並過濾郵件)
-    - [3. 摘要生成](#3-摘要生成)
-    - [4. 輸出摘要至 Markdown](#4-輸出摘要至-markdown)
-    - [5. 定時執行自動化](#5-定時執行自動化)
-- [實作細節與建議](#實作細節與建議)
-- [結論](#結論)
+- [Solution](#solution)
+    - [1. Using the Gmail API to Retrieve Emails](#1-using-the-gmail-api-to-retrieve-emails)
+    - [2. Downloading and Filtering Emails](#2-downloading-and-filtering-emails)
+    - [3. Summary Generation](#3-summary-generation)
+    - [4. Outputting Summary to Markdown](#4-outputting-summary-to-markdown)
+    - [5. Scheduling Automation](#5-scheduling-automation)
+    - [6. Integrating All Steps](#6-integrating-all-steps)
+- [Implementation Details and Suggestions](#implementation-details-and-suggestions)
+- [Conclusion](#conclusion)
 
-## 解決方案
+## Solution
 
-我構思了一個方案，目的是透過自動化的工具來處理這些郵件，從而節省時間和精力。
+I devised a plan aimed at handling these emails through automated tools, thereby saving time and effort.
 
-整體設計流程和步驟如下列：
+The overall design process and steps are as follows:
 
-### 1. 使用 Gmail API 獲取郵件
+### 1. Using the Gmail API to Retrieve Emails
 
-首先，需要設置 Gmail API 來訪問我的郵箱。這需要在 Google Workspace 上註冊一個專案並啟用 Gmail API，然後按照 [**Python quickstart**](https://developers.google.com/gmail/api/quickstart/python) 的指南完成設定，獲取 `credentials.json`。
+Firstly, it's necessary to set up the Gmail API to access my mailbox. This involves registering a project on Google Workspace, enabling the Gmail API, and then following the [**Python quickstart**](https://developers.google.com/gmail/api/quickstart/python) guide to complete the setup and obtain `credentials.json`.
 
-得到 `credentials.json` 之後，需要使用它來獲取 `token.json`，這是用於訪問郵箱的憑證。
+After obtaining `credentials.json`, you'll need it to acquire `token.json`, which serves as the credential to access the mailbox.
 
-用來獲取 `token.json` 的腳本由 Google 所提供：[**login_get_token.py**](login_get_token.py)。
+The script provided by Google for obtaining `token.json` is [**login_get_token.py**](login_get_token.py).
 
-這大概是整個專案中最繁瑣的一步，但只需要做一次。比較麻煩的是取得 `token.json` 之後，它會一直過期，所以需要定期更新，因此我另外寫了一個腳本來定時更新 `token.json`：[**refresh_token.sh**](refresh_token.sh)。
+This is perhaps the most tedious step of the entire project, but it only needs to be done once. The tricky part is that after obtaining `token.json`, it expires continually, so I wrote another script to refresh `token.json` periodically: [**refresh_token.sh**](refresh_token.sh).
 
-相關設定方式我會建議讀者直接參考官方文件，因為非官方的教學大多都已經過時了。（踩坑經驗）
+I would recommend readers directly refer to the official documentation for the setup process, as most unofficial tutorials are outdated. (A lesson learned the hard way)
 
-執行 login 的程式前，記得先安裝相關的套件：
+Before running the login program, remember to install the necessary packages:
 
 ```bash
 pip install --upgrade google-api-python-client google-auth-httplib2 google-auth-oauthlib
 ```
 
-### 2. 下載並過濾郵件
+### 2. Downloading and Filtering Emails
 
-接下來，利用 Gmail API 下載郵件並過濾掉不需要的郵件。
+Next, use the Gmail API to download emails and filter out unwanted messages.
 
-我寫了個腳本 [**parse_message.py**](parse_message.py)，專門用於過濾和解析郵件內容。
+I wrote a script, [**parse_message.py**](parse_message.py), specifically for filtering and parsing email content.
 
-### 3. 摘要生成
+### 3. Summary Generation
 
-為了生成摘要，我考慮了兩種方案：
+To generate summaries, I considered two approaches:
 
-- **OpenAI 的 ChatGPT 模型**：
+- **OpenAI's ChatGPT Model**:
 
-    這是我的首選方案，因為它提供了高品質的摘要。需要在 [OpenAI API](https://platform.openai.com/docs/overview) 註冊並安裝 `openai`，使用以下範例代碼生成摘要。
+    This was my preferred solution, as it offers high-quality summaries. Registration and installation of `openai` are necessary at [OpenAI API](https://platform.openai.com/docs/overview), and the following example code can be used to generate summaries.
 
     ```python
-    # 由 OpenAI 提供的範例檔案
+    # Example file provided by OpenAI
     from openai import OpenAI
     client = OpenAI()
 
@@ -84,161 +93,263 @@ pip install --upgrade google-api-python-client google-auth-httplib2 google-auth-
     print(completion.choices[0].message)
     ```
 
-    我參考他們提供的範例，把它修改成了一個更適合我的需求的版本，我嘗試了幾種 Prompt 的設置，最終選擇了一個效果最好的版本。
+    Inspired by their example, I adapted it into a version more suited to my needs. After experimenting with various Prompt configurations, I selected the most effective version.
 
     ```python
+    import json
     import os
+    from typing import Dict, List
+
+    import tiktoken
     from openai import OpenAI
 
-    def chatgpt_summary(content: str, model: str = 'gpt-3.5-turbo') -> str:
 
-        # Setting `OPENAI_API_KEY` environment variable is required
+    def chatgpt_summary(results: List[Dict[str, str]], model: str = 'gpt-3.5-turbo') -> str:
+
+        # Setting the `OPENAI_API_KEY` environment variable is required
         client = OpenAI(api_key=os.environ['OPENAI_API_KEY'])
 
         prompt = '''
-            我需要你幫我針對上面段落進行梳理和總結，然後給我彙整報告，要告訴讀者過去一段時間
-            （請你根據郵件內容自行判定時間區段）內，這個專案發生什麼事情，有什麼錯誤被發現，
-            有什麼議題在討論，新增了什麼功能和解決了什麼問題等等，包含但不限於以上，
-            請你根據你的經驗提供更好的彙整方式。
-            最後，考慮到輸出的內容可能有一些特定的專有名詞，請你自行判斷專有名詞是否需要額外的解釋，
-            如果你認為讀者可能需要，那除了彙整資訊之外，還要再補上相關的延伸說明。
-            請用繁體中文撰寫文章且儘可能闡述更多內容，且寫文章時請你務必注意分段和說明完整性。
+            I need you to sift through the preceding paragraphs and summarize them.
+            First, eliminate any irrelevant information and identify key textual
+            descriptions.
+            Then compile a report, detailing what has happened in the project
+            over a certain period, based on the content of the emails.
+            Please determine the time frame yourself.
+            Describe any errors, issues, new features added, and problems solved,
+            among other things. You might devise a better way to consolidate
+            this information based on your experience.
+            Finally, considering the output may contain specific jargon,
+            decide if any terms require further explanation. If you think the
+            reader might need it, then in addition to summarizing the information,
+            include relevant extended explanations.
+            Please write the article in Traditional Chinese, elaborating as
+            much detail as possible. Since the readers are experts in the field,
+            you may describe more related engineering details while ensuring
+            paragraph division and completeness of explanations.
         '''
 
-        response = client.chat.completions.create(
+        # Segmenting the results, 30 items per segment
+        results_seg = [results[i:i + 30] for i in range(0, len(results), 30)]
+
+        responses = []
+        for i, seg in enumerate(results_seg):
+            content = json.dumps(seg)
+
+            # Estimate tokens
+            enc = tiktoken.encoding_for_model("gpt-3.5-turbo")
+            tokens = enc.encode(content)
+            print(f'Segment {i}: Length of tokens: {len(tokens)}')
+
+            response = client.chat.completions.create(
+                model=model,
+                messages=[
+                    {"role": "system", "content": "You are a helpful assistant."},
+                    {"role": "user", "content": f"{content}\n\n{prompt}"},
+                ],
+                temperature=0.7,
+            ).choices[0].message.content
+
+            responses.append(response)
+
+        # Consolidating segment results
+        all_content = '\n\n'.join(responses)
+        summary = client.chat.completions.create(
             model=model,
             messages=[
                 {"role": "system", "content": "You are a helpful assistant."},
-                {"role": "user", "content": f"{content}\n\n{prompt}"},
+                {"role": "user", "content": f"{all_content}\n\n{prompt}"},
             ],
-            temperature=0,
-        )
+            temperature=0.7,
+        ).choices[0].message.content
 
-        return response.choices[0].message.content
+        return summary
     ```
 
-- [**HuggingFace 的 mistral-7B 模型**](https://huggingface.co/mistralai/Mistral-7B-Instruct-v0.2) :
+- [**HuggingFace's mistral-7B model**](https://huggingface.co/mistralai/Mistral-7B-Instruct-v0.2):
 
-    雖然這是一個開源方案，但因效果不佳以及運算資源消耗較大，所以最終未採用。
+    Although this is an open-source solution, it was ultimately not adopted due to poor performance and high computational resource consumption.
 
-    如果你想使用這個模型，可以參考以下由 HuggingFace 所提供的範例代碼：
+    For those interested in using this model, the example code provided by HuggingFace can be referenced:
 
     ```python
-    # 由 HuggingFace 提供的範例檔案
-    from transformers import AutoModelForCausalLM, AutoTokenizer
+        # Example file provided by HuggingFace
+        from transformers import AutoModelForCausalLM, AutoTokenizer
 
-    device = "cuda" # the device to load the model onto
+        device = "cuda" # the device to load the model onto
 
-    model = AutoModelForCausalLM.from_pretrained("mistralai/Mistral-7B-Instruct-v0.2")
-    tokenizer = AutoTokenizer.from_pretrained("mistralai/Mistral-7B-Instruct-v0.2")
+        model = AutoModelForCausalLM.from_pretrained("mistralai/Mistral-7B-Instruct-v0.2")
+        tokenizer = AutoTokenizer.from_pretrained("mistralai/Mistral-7B-Instruct-v0.2")
 
-    messages = [
-        {"role": "user", "content": "What is your favourite condiment?"},
-        {"role": "assistant", "content": "Well, I'm quite partial to a good squeeze of fresh lemon juice. It adds just the right amount of zesty flavour to whatever I'm cooking up in the kitchen!"},
-        {"role": "user", "content": "Do you have mayonnaise recipes?"}
-    ]
+        messages = [
+            {"role": "user", "content": "What is your favourite condiment?"},
+            {"role": "assistant", "content": "Well, I'm quite partial to a good squeeze of fresh lemon juice. It adds just the right amount of zesty flavour to whatever I'm cooking up in the kitchen!"},
+            {"role": "user", "content": "Do you have mayonnaise recipes?"}
+        ]
 
-    encodeds = tokenizer.apply_chat_template(messages, return_tensors="pt")
+        encodeds = tokenizer.apply_chat_template(messages, return_tensors="pt")
 
-    model_inputs = encodeds.to(device)
-    model.to(device)
+        model_inputs = encodeds.to(device)
+        model.to(device)
 
-    generated_ids = model.generate(model_inputs, max_new_tokens=1000, do_sample=True)
-    decoded = tokenizer.batch_decode(generated_ids)
-    print(decoded[0])
+        generated_ids = model.generate(model_inputs, max_new_tokens=1000, do_sample=True)
+        decoded = tokenizer.batch_decode(generated_ids)
+        print(decoded[0])
     ```
 
-### 4. 輸出摘要至 Markdown
+### 4. Outputting Summary to Markdown
 
-為了方便閱讀和分享，摘要將輸出成 Markdown 格式，這樣就可以直接推送到 GitHub 上。
+For ease of reading and sharing, the summary will be output in Markdown format. This allows for direct pushing to a GitHub repository.
 
-### 5. 定時執行自動化
+### 5. Scheduling Automation
 
-為了讓這個過程完全自動化，我利用了 Linux 的 `crontab` 功能來設置定時任務。這樣可以確保每天固定時間自動執行腳本，抓取新郵件，生成摘要，並更新 GitHub 存儲庫。
+To fully automate the process, I utilized Linux's `crontab` functionality to set up a scheduled task. This ensures the script automatically runs at a fixed time every day to fetch new emails, generate summaries, and update the GitHub repository.
 
-具體的 `crontab` 設定如下：
+The specific `crontab` setup is as follows:
 
 ```bash
 crontab -e
 ```
 
-接著添加以下內容：
+Then add the following content:
 
 ```bash
-# Edit this file to introduce tasks to be run by cron.
-#
-# Each task to run has to be defined through a single line
-# indicating with different fields when the task will be run
-# and what command to run for the task
-#
-# To define the time you can provide concrete values for
-# minute (m), hour (h), day of month (dom), month (mon),
-# and day of week (dow) or use '*' in these fields (for 'any').
-#
-# Notice that tasks will be started based on the cron's system
-# daemon's notion of time and timezones.
-#
-# Output of the crontab jobs (including errors) is sent through
-# email to the user the crontab file belongs to (unless redirected).
-#
-# For example, you can run a backup of all your user accounts
-# at 5 a.m every week with:
-# 0 5 * * 1 tar -zcf /var/backups/home.tgz /home/
-#
-# For more information see the manual pages of crontab(5) and cron(8)
-#
-# m h  dom mon dow   command
-
 # Define your environment variables
 OPENAI_API_KEY="your_openai_api_key"
 
-# 每天早上 6 點自動執行更新腳本
+# Automatically run the update script at 6 AM every day
 0 6 * * * /path/to/your/script/update_albumentations_infos.sh
 
-# 每小時更新 GmailAPI Token
+# Refresh the GmailAPI Token every hour
 */50 * * * * /path/to/your/script/refresh_token.sh
 ```
 
-在設置定時任務之前，不要忘記給腳本文件賦予執行權限：
+Before setting up the scheduled tasks, don't forget to grant execution permissions to the script files:
 
 ```bash
 chmod +x /path/to/your/script/update_albumentations_infos.sh
 chmod +x /path/to/your/script/refresh_token.sh
 ```
 
-此外，由於 crontab 的環境特殊性，你必須確保執行的 python 環境和相關套件都是正確的。因此在腳本中，我通常會使用絕對路徑來執行 python 程式，請記得要修改腳本中的路徑。
+Moreover, due to the unique environment of crontab, you must ensure the correct python environment and associated packages are used. Hence, in the scripts, I usually employ absolute paths for running python programs. Be sure to modify the paths in your scripts accordingly.
 
 ```bash
 # `update_albumentations_infos.sh` and `refresh_token.sh`
 
-# ...以上省略
+# ...omitted above
 
-# 執行 Python 程式，要把這邊改成你自己的 python 路徑
+# Run the Python program, remember to change this to your python path
 $HOME/.pyenv/versions/3.8.18/envs/main/bin/python main.py --project_name $project_name --time_length 1 2>&1
 
-# ...以下省略
+# ...omitted below
 ```
 
-## 實作細節與建議
+---
 
-在實施這一個自動化方案時，我有些建議：
+Reminding readers about the peculiarities of the crontab environment, it does not load your `.bashrc` or `.bash_profile` among other files. Hence, you need to specify all your environment variables within your script.
 
-首先，不管怎樣，拜託不要：**硬編碼你的憑證和密鑰**。
+This is the reason why I set the `OPENAI_API_KEY` environment variable in the crontab's executing script.
 
-這樣做會導致你的憑證和密鑰泄露，進而導致你的郵件和數據不再安全。
+So, how do you test an automation task based on the crontab environment after setting it up?
 
-請將這些敏感信息存儲在安全的地方，並且不要將它們直接公開在任何場合。
+Here's a little trick: start a new terminal session, stripping out all environment variables, then run your script.
 
-- **確保安全性**：處理 Gmail API 和 OpenAI API 時，請妥善保管你的 `credentials.json` 和 API 密鑰。
+```bash
+env -i HOME=$HOME OPENAI_API_KEY=your_openai_api_key /bin/bash --noprofile --norc
 
-其他就不是很重要了，就是一些小建議：
+# Then run your script
+/path/to/your/script/update_albumentations_infos.sh
+```
 
-- **考慮郵件多樣性**：在過濾和解析郵件時，考慮到不同類型的郵件格式和內容，使腳本能夠靈活應對各種情況。
-- **定期檢查與維護**：雖然這是一個自動化方案，但定期檢查執行狀況和更新腳本以適應可能的 API 變更仍然是必要的。
+Executing your script from this terminal session allows you to see how it would run under the crontab environment.
 
-## 結論
+### 6. Integrating All Steps
 
-通過這個項目，我再次成功地提高效率（偷懶）了。
+Finally, I integrated all the steps into one script named [**update_albumentations_infos.py**](update_albumentations_infos.sh), which includes function calls and the capability to automatically push updates to GitHub.
 
-我希望這個方案能夠幫助到有類似需求的人，並鼓勵更多的開發者探索和實施自動化解決方案來優化日常工作流程。
+```bash
+#!/bin/bash
 
+# update_albumentations_infos.sh
+
+cd $HOME/workspace/GmailSummary
+
+# Specify a list of project names
+project_names=("albumentations" "onnxruntime")
+log_dir="logs"
+current_date=$(date '+%Y-%m-%d')
+
+# Create a log directory if it doesn't exist
+mkdir -p $log_dir
+
+for project_name in "${project_names[@]}"; do
+
+    log_file="$log_dir/$project_name-log-$current_date.txt"
+
+    # Begin execution and log
+    {
+        echo "Starting the script for $project_name at $(date)"
+
+        # Execute Python program
+        $HOME/.pyenv/versions/3.8.18/envs/main/bin/python main.py --project_name $project_name --time_length 1 2>&1
+
+        # Construct file name
+        file_name="$project_name-update-$current_date.md"
+
+        # Create project folder, ignore if it exists
+        mkdir -p $project_name
+        mv $file_name $project_name 2>&1
+
+        # Add the new file to Git
+        git add "$project_name/$file_name" 2>&1
+
+        # Commit changes
+        git commit -m "[A] Add $project_name report for $current_date" 2>&1
+
+        # Push to GitHub
+        git push 2>&1
+
+        echo "Script finished for $project_name at $(date)"
+
+    } >> "$log_file" 2>&1
+
+    # Check if the last command was successful
+    if [ $? -ne 0 ]; then
+        echo "An error occurred for $project_name, please check the log file $log_file."
+    fi
+
+done
+```
+
+## Implementation Details and Suggestions
+
+When implementing this automation solution, I have some suggestions:
+
+First and foremost, please do not: **hard-code your credentials and keys**.
+
+This could lead to the leakage of your credentials and keys, compromising the security of your emails and data.
+
+Store these sensitive pieces of information securely and do not publicly disclose them under any circumstances.
+
+- **Ensure Security**: When handling the Gmail API and OpenAI API, securely manage your `credentials.json` and API keys.
+
+Other than that, there are just some minor suggestions:
+
+- **Consider the Diversity of Emails**: When filtering and parsing emails, consider different types of email formats and contents to make the script adaptable to various situations.
+- **Regular Check and Maintenance**: Although this is an automated solution, regularly checking the execution status and updating scripts to accommodate possible API changes is still necessary.
+
+## Conclusion
+
+Through this project, I have once again successfully increased efficiency (or laziness).
+
+I hope this solution can help those with similar needs and encourage more developers to explore and implement automation solutions to optimize their daily workflows.
+
+## FAQ
+
+1. **Why not use GPT-4?**
+
+    Because it's expensive. Although it produces better content, the price is **20 times** that of GPT-3.5. I don't want to spend too much just for the sake of laziness.
+
+2. **Isn't the content of your emails confidential?**
+
+    No, these emails are public. You can see all the content if you visit the GitHub pages of those open-source projects. However, I guess you don't have the patience to read them all.
