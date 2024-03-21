@@ -15,7 +15,7 @@ def generate_markdown_report(input_text, project_name, date):
     title = f"{project_name} 更新報告 - {date}"
     markdown_text = input_text.replace('\n', '\n\n')
     markdown_content = f"# {title}\n\n{markdown_text}"
-    file_name = f"{project_name}-Update-{date}.md"
+    file_name = f"{project_name}-update-{date}.md"
     with open(file_name, "w", encoding="utf-8") as file:
         file.write(markdown_content)
     return file_name
@@ -59,7 +59,8 @@ def main(project_name, time_length):
     summary = f'{summary}\n\n---\n\n以上報告由 OpenAI GPT-3.5 Turbo 模型自動生成。'
 
     # 生成 Markdown 報告
-    markdown_file = generate_markdown_report(summary)
+    markdown_file = generate_markdown_report(
+        summary, project_name, current_date.strftime('%Y-%m-%d'))
     print(f"Markdown 文件已生成: {markdown_file}")
 
 
