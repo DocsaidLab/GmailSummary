@@ -1,8 +1,6 @@
-import json
 from argparse import ArgumentParser
 from datetime import datetime, timedelta
 
-import tiktoken
 from get_messages import get_messages
 from google.oauth2.credentials import Credentials
 from googleapiclient.discovery import build
@@ -49,13 +47,8 @@ def main(project_name, time_length):
         for msg in tqdm(messages)
     ]
 
-    # 估計 token
-    enc = tiktoken.encoding_for_model("gpt-3.5-turbo")
-    tokens = enc.encode(json.dumps(results, indent=4))
-    print(f'Length of tokens: {len(tokens)}')
-
     # 調用 OpenAI API
-    summary = chatgpt_summary(json.dumps(results, indent=4))
+    summary = chatgpt_summary(results)
     summary = f'{summary}\n\n---\n\n以上報告由 OpenAI GPT-3.5 Turbo 模型自動生成。'
 
     # 生成 Markdown 報告
