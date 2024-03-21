@@ -218,7 +218,7 @@ Then add the following content:
 OPENAI_API_KEY="your_openai_api_key"
 
 # Automatically run the update script at 6 AM every day
-0 6 * * * /path/to/your/script/update_albumentations_infos.sh
+0 6 * * * /path/to/your/script/update_targets_infos.sh
 
 # Refresh the GmailAPI Token every hour
 */50 * * * * /path/to/your/script/refresh_token.sh
@@ -227,14 +227,14 @@ OPENAI_API_KEY="your_openai_api_key"
 Before setting up the scheduled tasks, don't forget to grant execution permissions to the script files:
 
 ```bash
-chmod +x /path/to/your/script/update_albumentations_infos.sh
+chmod +x /path/to/your/script/update_targets_infos.sh
 chmod +x /path/to/your/script/refresh_token.sh
 ```
 
 Moreover, due to the unique environment of crontab, you must ensure the correct python environment and associated packages are used. Hence, in the scripts, I usually employ absolute paths for running python programs. Be sure to modify the paths in your scripts accordingly.
 
 ```bash
-# `update_albumentations_infos.sh` and `refresh_token.sh`
+# `update_targets_infos.sh` and `refresh_token.sh`
 
 # ...omitted above
 
@@ -258,19 +258,19 @@ Here's a little trick: start a new terminal session, stripping out all environme
 env -i HOME=$HOME OPENAI_API_KEY=your_openai_api_key /bin/bash --noprofile --norc
 
 # Then run your script
-/path/to/your/script/update_albumentations_infos.sh
+/path/to/your/script/update_targets_infos.sh
 ```
 
 Executing your script from this terminal session allows you to see how it would run under the crontab environment.
 
 ### 6. Integrating All Steps
 
-Finally, I integrated all the steps into one script named [**update_albumentations_infos.py**](update_albumentations_infos.sh), which includes function calls and the capability to automatically push updates to GitHub.
+Finally, I integrated all the steps into one script named [**update_targets_infos.py**](update_targets_infos.sh), which includes function calls and the capability to automatically push updates to GitHub.
 
 ```bash
 #!/bin/bash
 
-# update_albumentations_infos.sh
+# update_targets_infos.sh
 
 cd $HOME/workspace/GmailSummary
 
@@ -353,3 +353,13 @@ I hope this solution can help those with similar needs and encourage more develo
 2. **Isn't the content of your emails confidential?**
 
     No, these emails are public. You can see all the content if you visit the GitHub pages of those open-source projects. However, I guess you don't have the patience to read them all.
+
+3. **How ​​to specify the emails to be analyzed?**
+
+    In `update_targets_infos.py`, you can modify `project_names` to set the projects you want to analyze.
+
+    ```bash
+    # update_targets_infos.py
+    # Specify a list of project names
+    project_names=("albumentations" "onnxruntime") # <-- Modify this line
+    ```

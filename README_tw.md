@@ -233,7 +233,7 @@ crontab -e
 OPENAI_API_KEY="your_openai_api_key"
 
 # 每天早上 6 點自動執行更新程式
-0 6 * * * /path/to/your/script/update_albumentations_infos.sh
+0 6 * * * /path/to/your/script/update_targets_infos.sh
 
 # 每小時更新 GmailAPI Token
 */50 * * * * /path/to/your/script/refresh_token.sh
@@ -242,14 +242,14 @@ OPENAI_API_KEY="your_openai_api_key"
 在設置定時任務之前，不要忘記給程式文件賦予執行權限：
 
 ```bash
-chmod +x /path/to/your/script/update_albumentations_infos.sh
+chmod +x /path/to/your/script/update_targets_infos.sh
 chmod +x /path/to/your/script/refresh_token.sh
 ```
 
 此外，由於 crontab 的環境特殊性，你必須確保執行的 python 環境和相關套件都是正確的。因此在程式中，我通常會使用絕對路徑來執行 python 程式，請記得要修改程式中的路徑。
 
 ```bash
-# `update_albumentations_infos.sh` and `refresh_token.sh`
+# `update_targets_infos.sh` and `refresh_token.sh`
 
 # ...以上省略
 
@@ -273,21 +273,21 @@ $HOME/.pyenv/versions/3.8.18/envs/main/bin/python main.py --project_name $projec
 env -i HOME=$HOME OPENAI_API_KEY=your_openai_api_key /bin/bash --noprofile --norc
 
 # 接著執行程式
-/path/to/your/script/update_albumentations_infos.sh
+/path/to/your/script/update_targets_infos.sh
 ```
 
 從這個終端執行程式，你就可以看到程式在 crontab 環境下的執行狀況。
 
 ### 6. 串接所有步驟
 
-最後，我把所有的步驟串接在一起，寫成了一個程式 [**update_albumentations_infos.py**](update_albumentations_infos.sh)。
+最後，我把所有的步驟串接在一起，寫成了一個程式 [**update_targets_infos.py**](update_targets_infos.sh)。
 
 其中包括了函數調用還有自動推送到 GitHub 的功能。
 
 ```bash
 #!/bin/bash
 
-# update_albumentations_infos.sh
+# update_targets_infos.sh
 
 cd $HOME/workspace/GmailSummary
 
@@ -370,3 +370,13 @@ done
 2. **你的郵件內容不是機密嗎？**
 
     不是，這些郵件都是公開的，你只要去那些開源專案的 GitHub 頁面，就可以看到所有的內容，不過我猜你沒有耐心看完。
+
+3. **如何指定要分析的郵件？**
+
+    在 `update_targets_infos.py` 中，你可以修改 `project_names` 來設置你想要分析的項目。
+
+    ```bash
+    # update_targets_infos.py
+    # 指定項目名稱列表
+    project_names=("albumentations" "onnxruntime") # <-- 改這一行
+    ```
