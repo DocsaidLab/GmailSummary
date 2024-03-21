@@ -9,7 +9,7 @@ def get_messages(
     user_id='me',
     after_date=None,
     subject_filter: str = None,
-    max_results: int = 500
+    max_results: int = 1000
 ) -> List[Dict[str, str]]:
     """
     A function to list all messages in the user's mailbox.

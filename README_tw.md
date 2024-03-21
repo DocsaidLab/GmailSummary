@@ -287,21 +287,25 @@ env -i HOME=$HOME OPENAI_API_KEY=your_openai_api_key /bin/bash --noprofile --nor
 ```bash
 #!/bin/bash
 
-# update_targets_infos.sh
-
 cd $HOME/workspace/GmailSummary
 
 # 指定項目名稱列表
-project_names=("albumentations" "onnxruntime")
+project_names=("albumentations" "onnxruntime" "pytorch")
 log_dir="logs"
+news_dir="news"
 current_date=$(date '+%Y-%m-%d')
 
 # 創造日誌資料夾，若已存在則忽略
 mkdir -p $log_dir
 
+# 創造news目錄，若已存在則忽略
+mkdir -p $news_dir
+
 for project_name in "${project_names[@]}"; do
 
     log_file="$log_dir/$project_name-log-$current_date.txt"
+
+    project_path="$news_dir/$project_name"
 
     # 開始執行並記錄日誌
     {
@@ -314,11 +318,11 @@ for project_name in "${project_names[@]}"; do
         file_name="$project_name-update-$current_date.md"
 
         # 創造專案資料夾，若已存在則忽略
-        mkdir -p $project_name
-        mv $file_name $project_name 2>&1
+        mkdir -p $project_path
+        mv $file_name $project_path 2>&1
 
         # 將新文件添加到 Git
-        git add "$project_name/$file_name" 2>&1
+        git add "$project_path/$file_name" 2>&1
 
         # 提交更改
         git commit -m "[A] Add $project_name report for $current_date" 2>&1
