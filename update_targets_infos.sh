@@ -32,13 +32,13 @@ for project_name in "${project_names[@]}"; do
 
         # 創造專案資料夾，若已存在則忽略
         mkdir -p $project_path
-        mv $file_name $project_path 2>&1
+        mv $file_name "$project_path/README.md" 2>&1
 
         # 將新文件添加到 Git
-        git add "$project_path/$file_name" 2>&1
+        git add "$project_path/README.md" 2>&1
 
         # 提交更改
-        git commit -m "[A] Add $project_name report for $current_date" 2>&1
+        git commit -m "[C] Updare $project_name report for $current_date" 2>&1
 
         # 推送到 GitHub
         git push 2>&1
