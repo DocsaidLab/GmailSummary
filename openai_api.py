@@ -22,8 +22,8 @@ def chatgpt_summary(results: List[Dict[str, str]], model: str = 'gpt-3.5-turbo')
         多描述一些相關的工程細節，同時務必注意分段和說明完整性。
     '''
 
-    # 分段，每 30 個內容分一段
-    results_seg = [results[i:i + 30] for i in range(0, len(results), 30)]
+    # 分段，每 20 個內容分一段
+    results_seg = [results[i:i + 20] for i in range(0, len(results), 20)]
 
     responses = []
     for i, seg in enumerate(results_seg):
@@ -46,6 +46,7 @@ def chatgpt_summary(results: List[Dict[str, str]], model: str = 'gpt-3.5-turbo')
         responses.append(response)
 
     # 彙整分段結果
+    print(f'Summary all segments...', end=' ')
     all_content = '\n\n'.join(responses)
     summary = client.chat.completions.create(
         model=model,
@@ -55,5 +56,6 @@ def chatgpt_summary(results: List[Dict[str, str]], model: str = 'gpt-3.5-turbo')
         ],
         temperature=0.7,
     ).choices[0].message.content
+    print('Done.')
 
     return summary
