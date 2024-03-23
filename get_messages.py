@@ -9,7 +9,7 @@ def get_messages(
     user_id='me',
     after_date=None,
     subject_filter: str = None,
-    max_results: int = 1000
+    max_results: int = 500
 ) -> List[Dict[str, str]]:
     """
     A function to list all messages in the user's mailbox.
@@ -38,6 +38,7 @@ def get_messages(
         now = datetime.now(tz)
         after_date = (now - timedelta(days=1)).strftime('%Y/%m/%d')
 
+    messages = []
     try:
         query = ''
         if after_date:
@@ -47,13 +48,20 @@ def get_messages(
 
         response = service.users().messages().list(
             userId=user_id, q=query, maxResults=max_results).execute()
-        messages = response.get('messages', [])
 
-        if not messages:
-            print("No messages found.")
+        messages.extend(response.get('messages', []))
 
-        return messages
+        # Handle pagination with nextPageToken
+        while 'nextPageToken' in response:
+            page_token = response['nextPageToken']
+            response = service.users().messages().list(
+                userId=user_id, q=query, maxResults=max_results, pageToken=page_token).execute()
+            messages.extend(response.get('messages', []))
 
     except Exception as error:
         print(f'An error occurred: {error}')
-        return []
+
+    if not messages:
+        print("No messages found.")
+
+    return messages
