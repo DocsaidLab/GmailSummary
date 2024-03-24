@@ -1,40 +1,26 @@
-# onnxruntime 更新報告 - 2024-03-24
+# onnxruntime 更新報告 - 2024-03-25
 
-根據收到的郵件內容，Microsoft Onnxruntime專案在過去一段時間內發生了多個重要更新和事件。以下是這些更新的梳理和總結：
-
-
-
-1. 更新內容包括對於模型量化和性能優化的功能增強，以及針對已知問題的修復。其中，重要的更新包括對於Packed QKV和Rotary Embedding的支持、Conv節點加載失敗問題的修復、混合精度整數量化的實現等。
+根據收到的郵件內容，最近關於Microsoft Onnxruntime專案的重要更新可以歸納如下：
 
 
 
-2. 在錯誤修復方面，專案團隊合併了多個PR（Pull Request）以解決加載Conv節點失敗、ConvTranspose在channel-first情況下使用非matmul實現的問題、WASM的GEMM錯誤等。這些修復對於提高專案的穩定性和功能性至關重要。
+在最近的更新中，專案團隊針對多個問題進行了修復和功能增強。其中包括修復了使用OpenVINO編譯的問題，並對提供者共享代碼和各個提供者代碼進行了分離設計。此外，對於CUDA圖形問題提供了解決方案，建議在第一次調用時創建IO Binding，並在後續調用時只需將數據複製到相同地址並使用IO Binding API重放捕獲的圖形。另外，對於性能下降的問題，提到了由於長時間無活動而被標記為陳舊的情況，將在30天後關閉，需要進一步支持時請提供更新或更多細節。
 
 
 
-3. 在功能新增方面，團隊提交了多個PR，包括支援新的量化API、ModelProto支援、transformers optimize_model等功能的增加。這些功能的引入豐富了專案的特性和應用範疇。
+此外，還有一系列關於特定問題的討論，如在Vite/React項目中加載ONNX模型的錯誤、在C# Windows應用程序中使用Olive和Onnxruntime 1.17轉換模型時出現OnnxRuntimeException的問題、MSVC在Windows上不警告未使用變量的問題，以及C#中序列和映射輸出支持不起作用的問題。這些問題也被標記為陳舊，將在30天後關閉。
 
 
 
-4. 此外，團隊也積極回應用戶提交的Issue，如在Unity應用程序中出現的EntryPointNotFoundException錯誤、1.17.1 NuGet套件性能問題等，並正在尋求相應的解決方案。
+在郵件中提到的具體更新和問題描述中，團隊針對各種錯誤和功能問題進行了討論和解決方案的提出。這些更新和討論涵蓋了專案的不同方面，並顯示了團隊致力於持續改進和優化Onnxruntime專案的決心。
 
 
 
-總的來說，這些更新顯示了Microsoft Onnxruntime專案團隊在持續改進專案、修復錯誤、引入新功能方面的努力和進展。這些更新對於提高專案的性能、穩定性和功能性都具有重要意義。
+根據郵件的日期範圍（從3月23日到3月24日），可以看出在這段時間內，團隊專注於解決CUDA圖形問題、性能下降問題以及一系列特定問題的修復和討論。這些更新和討論對於提高Onnxruntime專案的穩定性和功能性至關重要。
 
 
 
-延伸說明：
-
-- ModelProto：ModelProto是ONNX（Open Neural Network Exchange）中的一種數據結構，用於表示機器學習模型。
-
-- PR（Pull Request）：指代開發人員提交的代碼更改請求，通常用於新增功能、修復錯誤或進行代碼審查。
-
-- Conv節點：在深度學習中，Convolutional Neural Network（卷積神經網絡）中的卷積層節點，用於特徵提取和圖像處理。
-
-- GEMM：General Matrix Multiply，通常用於描述矩陣相乘的操作，是深度學習中常見的運算之一。
-
-- CUDA EP：CUDA Execution Provider，用於在GPU上執行計算的軟件庫，可提高深度學習模型的運行速度。
+對於不熟悉專有名詞的讀者，建議解釋一下OpenVINO、CUDA、Onnxruntime、IO Binding等名詞。OpenVINO是Intel針對視覺應用優化的工具套件，CUDA是NVIDIA提供的並行運算平台和應用程式程式介面，Onnxruntime是一個開源的深度學習推理引擎，IO Binding是指輸入輸出綁定的機制。這些名詞的解釋有助於讀者更好地理解文章內容。
 
 
 
