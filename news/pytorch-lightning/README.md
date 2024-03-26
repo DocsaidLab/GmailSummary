@@ -1,52 +1,42 @@
-# pytorch-lightning 更新報告 - 2024-03-26
+# pytorch-lightning 更新報告 - 2024-03-27
 
-根據收到的郵件內容，最近關於PyTorch Lightning專案的重要更新和問題可以歸納如下：
-
-
-
-1. **錯誤修復**：
-
-   - 修復了模型在使用`16-mixed`精度時出現的問題，導致`nn.Parameter`未正確轉換為`torch.float16`，可能導致模型在推論時出現`NaN`或其他不合理的輸出。
-
-   - 另一個錯誤修復是關於在CUDA上運行手動優化（多個優化器）時出現錯誤的問題，特別是在`16-mixed`精度下運行時。
+根據最近的郵件更新，Lightning-AI/pytorch-lightning專案有以下重要更新：
 
 
 
-2. **討論議題**：
+1. 修復了在分佈式訓練中記錄指標時的錯誤，建議使用`sync_dist=True`。
 
-   - 討論了在分散式數據並行訓練（DDP）中如何收集預測的議題，強調了在主進程上保存預測結果的重要性。
+2. 討論了訓練進度條在PyCharm中的正常工作問題。
 
+3. 解決了手動優化和AMP的問題，建議使用`loss.backward()`而不是`manual_backward(loss)`。
 
+4. 提交了允許FSDP策略用於hpu加速器的PR。
 
-3. **功能增加**：
+5. 新增了高級分析器功能，可以保存`.prof`文件並提供SnakeViz可視化工具示例。
 
-   - 增加了從`AdvancedProfiler`中導出profiling文件的功能，以幫助識別性能瓶頸。
+6. 修正了LightningCLI文件中Trainer Callbacks的錯誤示例。
 
-
-
-4. **文檔更新**：
-
-   - 修正了在yaml文件中設置回調函數的文檔錯誤，提供了一個可以正確工作的yaml文件示例。
+7. 討論了在多節點訓練中DeviceStatsMonitor僅捕獲node_rank為0的統計數據的問題。
 
 
 
-此外，還有一些具體的Issue和PR，如Issue #19694 提出了允許覆蓋初始批次/步驟索引的功能，以及PR #19693 更新了Lightning-AI/utilities到0.11.0版本。
-
-
-
-總的來說，最近的更新主要集中在錯誤修復、功能增加和文檔更新上，同時也有針對特定功能和討論議題進行了相應的處理和改進。這些更新和修復顯示了PyTorch Lightning專案持續努力改進和提升用戶體驗的努力。
+這些更新顯示了專案在錯誤修復、功能增加和討論議題方面的進展。在過去一段時間內，專案團隊積極解決問題並提供新功能，以改進專案的性能和功能性。這些更新反映了專案持續發展和改進的努力。
 
 
 
 延伸說明：
 
-- `16-mixed`精度：指的是使用混合精度訓練模型，其中部分操作使用`torch.float16`進行計算以提高效率。
+- 分佈式訓練（Distributed Training）：指在多個設備或節點上同時訓練模型，以加快訓練速度和提高效率。
 
-- DDP（分散式數據並行訓練）：是一種訓練深度學習模型的方法，通過將數據分發到多個設備上進行並行訓練，以加快訓練速度。
+- AMP（Automatic Mixed Precision）：一種訓練技術，通過混合精度訓練來提高訓練速度和節省內存。
 
-- `AdvancedProfiler`：是PyTorch Lightning中用於性能分析和瓶頸識別的工具。
+- FSDP（Fully Sharded Data Parallel）：一種分佈式訓練策略，用於有效地處理大型模型和數據集。
 
-- YAML文件：一種常用於配置文件的格式，用於定義數據的結構和內容。
+- LightningCLI：PyTorch Lightning提供的命令行界面，用於管理和執行訓練過程。
+
+- Trainer Callbacks：在PyTorch Lightning中用於監控和調整訓練過程的回調函數。
+
+- DeviceStatsMonitor：用於監控訓練過程中設備狀態和性能的統計信息。
 
 
 
