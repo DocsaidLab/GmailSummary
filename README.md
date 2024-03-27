@@ -27,6 +27,16 @@ I certainly don't. I usually delete them without even looking.
 
 Therefore, as an engineer seeking efficiency (or laziness), I began contemplating a solution to this problem.
 
+## Demo
+
+In the beginning, you can take a look at the results. This is the summary I automatically generated.
+
+The system updates it every day:
+
+- [Albumentations News](news/albumentations/)
+- [ONNXRuntime News](news/onnxruntime/)
+- [PyTorch-Lightning News](news/pytorch/)
+
 ## Table of Contents
 
 - [Solution](#solution)

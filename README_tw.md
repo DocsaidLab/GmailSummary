@@ -27,6 +27,14 @@
 
 因此，作為一名尋求效率（偷懶）的工程師，我開始思考如何解決這個問題。
 
+## Demo
+
+在開始之前，可以先看結果，這是我自動化生成的摘要，每天系統會自己更新：
+
+- [Albumentations News](news/albumentations/)
+- [ONNXRuntime News](news/onnxruntime/)
+- [PyTorch-Lightning News](news/pytorch/)
+
 ## 目錄
 
 - [解決方案](#解決方案)
