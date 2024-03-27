@@ -3,7 +3,7 @@
 cd $HOME/workspace/GmailSummary
 
 # 指定項目名稱列表
-project_names=("albumentations" "onnxruntime" "pytorch-lightning")
+project_names=("albumentations" "onnxruntime" "pytorch-lightning" "BentoML")
 log_dir="logs"
 news_dir="news"
 current_date=$(date '+%Y-%m-%d')
