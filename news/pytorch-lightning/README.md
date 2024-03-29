@@ -1,28 +1,34 @@
-# pytorch-lightning 更新報告 - 2024-03-29
+# pytorch-lightning 更新報告 - 2024-03-30
 
-根據收到的郵件內容，專案中的重要更新如下：
-
-
-
-1. **新增的功能：**
-
-   在名為「feat: add AsyncMLflowLogger」的PR #19639 中，討論了在MLFlowLogger中新增一個`async`標誌的提案。討論中提到了在MLFlow版本低於2.8.0時發出警告的問題，以及如何處理不同版本的MLFlow。有建議將參數命名為`synchronous`以保持一致性。這項功能的討論反映了團隊對於提升日誌記錄效率和彈性的關注。
+根據最新的更新內容，Lightning-AI/pytorch-lightning專案中出現了幾個重要的更新和討論：
 
 
 
-2. **修復問題：**
+1. **Issue #13755 - Components Listed on the Component Page need Hyperlinks**：
 
-   在名為「Only warn about unsupported bwd sync if enabled」的PR #19709 中，討論了在fabric腳本支持多種策略並集成`no_backward_sync`上下文管理器時，應如何處理不支持該功能但未啟用時的警告問題。這個修復展示了團隊對於解決潛在問題和提升代碼穩定性的努力。
-
-
-
-3. **文件更新：**
-
-   在名為「WIP: Add PyTorch 2.3 to CI matrix」的PR #19708 中，討論了將PyTorch 2.3添加到CI矩陣中的工作。討論中提到了覆蓋率下降了52％，並列出了受影響的文件和行數變化。這次文件更新顯示了團隊致力於支持最新技術和持續改進測試環境的努力。
+   用戶提出了一個關於元件頁面上元件需要超連結的問題。目前有用戶確認這個問題仍然開放供貢獻。這個問題的解決將有助於提升專案文件的易用性和導航性。
 
 
 
-這些重要更新突顯了團隊在專案開發過程中所面臨的挑戰和討論，包括功能增加、問題修復和技術更新。這些更新反映了團隊對於提高代碼質量、功能性和測試覆蓋率的承諾，確保專案持續順利進展。
+2. **PR #19639 - Add synchronous parameter to MLflowLogger**：
+
+   一位用戶提交了一個新的commit，為MLflowLogger新增了同步參數。另一位用戶已經批准了這個pull request。此更新將為使用MLflow的用戶提供更多控制選項，並展示了專案對於不斷改進日誌記錄功能的承諾。
+
+
+
+3. **Issue #19714 - Mixing the order of `--config` and `fit` in LightningCLI can cause confusion**：
+
+   用戶指出在LightningCLI中混合`--config`和`fit`的順序可能導致混淆。社區討論了如何改進錯誤消息以提供更好的用戶體驗，這表明專案團隊關注並致力於提升工具的易用性。
+
+
+
+4. **PR #19715 - Improve error message in LightningCLI if subcommand is not the first argument**：
+
+   一個新的pull request旨在改進LightningCLI中的錯誤消息，以提供更好的用戶反饋。這個更新將有助於提高用戶對於指令行工具使用時的理解和溝通效率。
+
+
+
+這些更新和討論突顯了專案團隊對於問題解決、功能增強和用戶體驗的關注。通過社區成員之間的合作和貢獻，專案持續進步並致力於提供更好的工具和資源給使用者。
 
 
 
