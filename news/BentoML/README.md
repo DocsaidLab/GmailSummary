@@ -1,18 +1,28 @@
-# BentoML 更新報告 - 2024-04-01
+# BentoML 更新報告 - 2024-04-02
 
-根據收到的郵件內容，這是一則關於BentoML專案的更新訊息。在這封郵件中，提到了一個新功能的需求，即暴露Prometheus Collector Registry客戶端選項。發件人在測試多個服務時遇到了一個問題，即因為處於同一進程中，出現了重複的Prometheus Collector Registry，而在測試中並不需要這些指標。因此，他建議配置並暴露此參數，以便在需要時啟用指標，以避免這個問題。
-
-
-
-這則更新訊息主要針對解決重複Collector Registry的問題提出了一個新功能需求。該需求是為了避免在測試中出現不必要的指標，並提供了一種配置選項來啟用或禁用Prometheus Collector Registry客戶端。
+根據收到的郵件內容，BentoML 專案最近的重要更新包括以下幾點：
 
 
 
-這個功能的動機部分未提供具體內容，而其他部分也沒有進一步的回應。整體而言，這封郵件強調了在BentoML專案中解決重複Collector Registry問題的重要性，並提出了一個具體的解決方案。
+1. **Issue #4631 - Trouble in saving the Keras model to the Bentoml model store**:
+
+   一位使用者在 Windows 11 桌面上遇到了保存 Keras 模型到 Bentoml 模型存儲庫時的問題。當使用 `bentoml.keras.save_model` 時出現了 `ValueError`，指出某些參數不被支持。這可能是由於 bentoml._internal.frameworks.keras 庫中的 bug 所導致。這個問題的解決將有助於提高模型保存的穩定性和可靠性。
 
 
 
-這則更新訊息提到的主題是Issue #4626，可以在GitHub上查看更多詳細信息。這封郵件是由BentoML專案發出的，收件人收到此郵件是因為他訂閱了這個主題。
+2. **PR #4628 - docs: Add workers doc**:
+
+   這個 PR 新增了有關如何配置和分配 workers 的文檔。文檔詳細解釋了如何使用 `workers` 參數來設置工作人員的數量，並提到了每個工作人員將模型加載到內存中的注意事項。同時，文檔還提到了如何調整並配置工作人員以有效利用底層硬件加速器，如 CPU 和 GPU。這將有助於用戶更好地管理和優化模型的運行環境。
+
+
+
+3. **PR #4627 - fix: issue overriding default service config from config file**:
+
+   這個 PR 解決了從配置文件覆蓋默認服務配置的問題。通過修復相關問題，提高了服務的配置靈活性和準確性。這將使用戶能夠更靈活地定制服務配置，以滿足不同需求和場景的應用。
+
+
+
+這些更新涉及到模型保存問題的修復、文檔的增加以及服務配置的改進，對於 BentoML 專案的進一步發展和用戶體驗都具有重要意義。這些改進將有助於提高專案的穩定性、功能性和靈活性，為用戶提供更好的工具和支持。
 
 
 
