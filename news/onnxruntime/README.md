@@ -1,22 +1,18 @@
-# onnxruntime 更新報告 - 2024-04-07
+# onnxruntime 更新報告 - 2024-04-08
 
-根據收到的郵件內容，關於專案的重要更新包括以下幾點：
-
-
-
-1. **QNN CPU 後端問題修復**：專案修復了 QNN CPU 後端的問題，但在嘗試使用 HTP 後端時出現了錯誤。這表明 QNN 不支援動態形狀，可能需要處理相關問題以確保功能完整性。
+根據收到的郵件內容，有關專案更新的重要資訊如下：
 
 
 
-2. **QNNExecutionProvider 錯誤**：在嘗試使用 QNNExecutionProvider 時，出現了錯誤指出動態形狀目前不受支援。這需要更深入的研究和解決方案，以確保模型運行正常。
+在專案「microsoft/onnxruntime」中，關於 Issue #19603，提到了缺少 onnxruntime_providers_tensorrt for cuda 12 builds 的問題，需要相關人員提供更新。這個問題對 CUDA 12 版本的構建造成了影響，需要解決缺少提供者的問題。另外，PR #20154 則是關於支持每通道量化權重的功能增加，@adrianlizarraga 推送了相應的提交，這將對 QNN 功能帶來改進。
 
 
 
-3. **討論 C++ 中使用 ONNX Runtime 搭配 WebGPU 或 WebNN 支援**：團隊討論了從 C++ 中使用 ONNX Runtime 搭配 WebGPU 或 WebNN 支援的可能性。這表明專案可能在探索擴展支援範圍以提供更多功能。
+在另一個分支中，也是在專案「microsoft/onnxruntime」中，有關 PR #19974 的更新顯示使用者「satyajandhyala」推送了一系列提交，旨在優化 MatMulNBits 的性能，包括改進性能、修復錯誤、格式調整等。這些更改旨在進一步改進 MatMulNBits 的性能和功能。此外，另一個更新是關於 PR #20163，使用者「liqunfu」推送了一個提交，對4位CPU進行了改進，調整了子塊的長度並優化了AVX512和AVX2的性能，帶來了約20%的改進。
 
 
 
-這些更新顯示了專案在解決問題、探索新功能以及擴展支援範圍方面的努力。需要特別關注動態形狀支援的問題，以確保專案的穩定性和功能完整性。這些討論和更新反映了團隊對於持續改進和解決挑戰的承諾。
+這些更新顯示了團隊在持續改進和優化不同專案中的努力，以提高性能、修復錯誤並增加功能。這些努力將有助於提升產品質量和用戶體驗。延伸說明：CUDA 是 NVIDIA 開發的一種並行運算平台和應用程式程式設計介面。QNN 是指量化神經網絡（Quantized Neural Networks），是一種將神經網絡權重和激活值轉換為低精度表示的技術，以節省計算和存儲空間。MatMulNBits 是指矩陣乘法（Matrix Multiplication）的 N 位版本，用於計算矩陣相乘的運算。 AVX512 和 AVX2 則是 Intel 開發的指令集擴展，用於提高 CPU 運算性能。
 
 
 
