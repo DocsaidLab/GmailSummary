@@ -1,32 +1,22 @@
-# onnxruntime 更新報告 - 2024-04-10
+# onnxruntime 更新報告 - 2024-04-11
 
-根據收到的郵件內容，對於 Microsoft Onnxruntime 專案的重要更新進行了梳理和總結如下：
-
-
-
-1. 在 PR #19974 中，Satyajandhyala 提交了兩個 commit，旨在改善 MatMulNBits 的性能。這些更改包括簡化組件計算並清理 uniforms，以提高 MatMulNBits 的效能。
+根據收到的郵件內容，以下是幾個重要的專案更新：
 
 
 
-2. PR #20216 中，Tianleiwu 提交了一個 commit，添加了 bf16 和符號形狀推斷，以引入 SparseAttention 運算符。這個更新旨在為專案增加 SparseAttention 運算符，可能對模型處理和效能優化有所幫助。
+1. 在 [microsoft/onnxruntime](https://github.com/microsoft/onnxruntime) 專案中，有一個關於更新 protobufjs 版本的 PR (#20270)。這次更新將 protobufjs 從 7.2.4 升級到 7.2.5，修復了一些 bug，包括註釋解析中的崩潰、新 Buffer 的棄用警告等。這次更新還提供了釋出說明和變更日誌，詳細列出了修復的問題和改進的內容。
 
 
 
-3. PR #20196 中，Yuslepukhin 提交了一個 commit，修正了 reserve() 的數量，以減少內存分配以減少堆爭用。這個更新專注於優化內存分配，從而改善系統效能和資源利用率。
+2. 另一個重要更新是在 [microsoft/onnxruntime](https://github.com/microsoft/onnxruntime) 專案的 PR #20167 中，討論了是否將 TensorRT 10 支援的 PR (#19695) 合併到主分支。團隊同意先將該 PR 合併到主分支，以確保順利進行後續工作。
 
 
 
-這些更新顯示了專案團隊在持續改進專案功能和效能方面的努力。從性能優化到功能增加，每個更新都針對特定問題或需求進行了改進，以提高專案的品質和功能性。這些努力將有助於專案在未來的發展中取得更多成就，並為使用者提供更好的體驗。
+3. 還有一倁關於整合 ONNX 1.16.0 的討論在 [microsoft/onnxruntime](https://github.com/microsoft/onnxruntime) 專案的 PR #19745 中。提及了新增的測試和修正，以確保與最新版本的 ONNX 整合順利進行。
 
 
 
-延伸說明：
-
-- MatMulNBits 是一種矩陣乘法運算，對於深度學習模型的計算至關重要。
-
-- SparseAttention 運算符通常用於處理稀疏注意力機制，對於自然語言處理等任務具有重要意義。
-
-- 內存分配和堆爭用是計算機系統中常見的性能問題，優化這些方面可以提高系統效能和資源利用率。
+這些更新顯示了團隊在持續改進專案功能和性能方面的努力，並且展示了他們在解決問題和實現目標方面的進展。這些訊息對於團隊成員和利益相關者來說都是重要的，因為它們提供了對專案進展的清晰和具體的了解。
 
 
 
