@@ -1,28 +1,38 @@
-# BentoML 更新報告 - 2024-04-12
+# BentoML 更新報告 - 2024-04-13
 
-根據收到的郵件內容，重要的更新內容如下：
-
-
-
-1. **錯誤修復：**
-
-   在名為`Service`的類別中，使用`PILImage`時遇到問題，無法使用`Content-Type: image/jpeg`，需要改為`Content-Type: multipart/form-data`。在嘗試使用`@bentoml.api(input_spec=Image())`時出現錯誤，提示`Image must be a class type`。這個問題需要解決以確保正確的圖片處理和API溝通。
+根據收到的郵件內容，BentoML專案最新的重要更新和討論議題如下：
 
 
 
-2. **功能迁移：**
-
-   嘗試將現有的代碼從舊的裝飾器`@bentoml.service`和`@bentoml.api`遷移到新的裝飾器，以利用引入的並發功能。在遷移過程中遇到問題，導致需要更改端點調用的`Content-Type`。這需要仔細檢查和調整以確保功能的順利遷移。
+1. **新增多模型加載和存儲示例**：@lycheel1 在https://github.com/bentoml/BentoML/pull/4575 中添加了多模型加載和存儲示例，這將有助於用戶更有效地管理多個模型。
 
 
 
-3. **討論議題：**
-
-   有一個討論關於如何像FastAPI風格一樣調試BentoML應用程式的問題，詢問是否有使用新的`@bentoml.service`註釋的解決方法。這個議題可能需要進一步的研究和討論，以找到最佳的調試方法。
+2. **新增推理圖**：@lycheel1 在https://github.com/bentoml/BentoML/pull/4609 中新增了推理圖，這將幫助用戶更好地理解模型推理過程。
 
 
 
-總的來說，專案目前主要集中在解決從舊裝飾器到新裝飾器的代碼遷移問題，包括修復圖片處理的錯誤和調整端點調用的`Content-Type`。同時，討論如何更有效地調試BentoML應用程式也是一個重要的議題。這些更新將有助於提升應用程式的效能和可靠性。
+3. **更新BentoML高級消息**：@Sherlock113 在https://github.com/bentoml/BentoML/pull/4644 中更新了BentoML高級消息，提供更清晰的消息傳遞指引。
+
+
+
+4. **修復部署時的超時刪除跟蹤錯誤**：@FogDong 在https://github.com/bentoml/BentoML/pull/4649 中修復了部署時的超時刪除跟蹤錯誤，提高部署的穩定性。
+
+
+
+5. **修正上傳狀態比較**：@frostming 在https://github.com/bentoml/BentoML/pull/4643 中修正了上傳狀態比較，確保了正確的比較邏輯。
+
+
+
+這些更新涵蓋了BentoML專案中的功能增強和錯誤修復，提升了用戶體驗和系統穩定性。此外，值得慶賀的是@lycheel1作為新貢獻者在https://github.com/bentoml/BentoML/pull/4575 中做出了他們的第一次貢獻，這是一個重要的里程碑，展示了社區成員的積極參與和貢獻。
+
+
+
+另外，還有一些討論議題包括依賴庫的升級、在Kubernetes上部署分散服務時的挑戰以及資源配置的實現方式。這些討論反映了專案持續發展和社區討論的活躍程度，有助於解決實際應用中的問題和挑戰。
+
+
+
+總的來說，BentoML專案的最新更新和討論議題展示了持續改進和社區參與的重要性，為機器學習模型部署工具的發展提供了有價值的貢獻。
 
 
 
