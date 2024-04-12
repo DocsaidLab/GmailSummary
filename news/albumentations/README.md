@@ -1,50 +1,28 @@
-# albumentations 更新報告 - 2024-04-12
+# albumentations 更新報告 - 2024-04-13
 
-根據收到的郵件內容，Albumentations 專案最新的重要更新包括以下內容：
-
-
-
-1. **PR #1654 - 更新貢獻者指南**：
-
-   這個PR對貢獻者指南進行了更新，涉及到多個檔案的更改，包括`.pre-commit-config.yaml`、`CONTRIBUTING.md`等。這次更新可能包含了對貢獻流程、代碼規範等方面的改進，有助於提升專案的開發效率和品質。
+根據收到的郵件內容，Albumentations團隊最近的重要更新包括以下幾點：
 
 
 
-2. **Issue #1653 - 技術債務問題**：
+1. **修復簽名問題（PR＃1659）**：
 
-   這個議題提到了將所有隨機計算從`apply_xxx`和`__init__`方法移動到`get_params_depend_on_targets`方法的目標。這項改進可能有助於提高代碼的可讀性和可維護性，同時減少潛在的錯誤。
-
-
-
-3. **PR #1651 - 新增`num_holes_range`、`holes_width_range`、`holes_height_range`**：
-
-   這個PR引入了新的參數`num_holes_range`、`holes_width_range`、`holes_height_range`，取代了舊的`min/max`參數。該PR中提到了對於新接口和舊接口的測試，以確保新版本的接口能夠正常工作，並保持與舊版本的兼容性。
+   在這次更新中，@ternaus提交了一個修復，解決了Albumentations庫中的簽名問題。這個修復包括對`__init__`函數簽名的緩存，以提高性能。同時，也擴展了測試案例，確保對`MyTransform`類型的驗證更加韌性。此外，將測試案例`test_my_transform_missing_required_param`中的異常類型從`ValidationError`更改為`ValueError`，以確保行為修改符合預期。
 
 
 
-4. **Issue #1652 - 新功能請求 - 添加對於超出圖像範圍的邊界框進行裁剪的選項**：
+2. **新增Sequential測試（PR＃1658）**：
 
-   這個議題提到了用戶在邊界框超出圖像範圍時出現錯誤的問題，並提出了添加`clip`參數的建議。這個功能的新增可能解決了用戶在處理邊界框時遇到的問題，提高了對於邊界框處理的靈活性和準確性。
-
-
-
-此外，還有兩個重要更新值得關注：
+   @ternaus在這次更新中新增了對Sequential的測試，包括不同概率下的測試案例。然而，在測試`test_sequential_with_horizontal_flip_prob_1`中，使用`patch('random.random', return_value=0.99)`模擬概率小於1的情況可能不是最佳方法，建議使用更直接的方法來控制和斷言測試中的隨機行為。
 
 
 
-1. **PR #1647 - Add_targets**：
+3. **修復隨機網格洗牌功能（PR＃1655）**：
 
-   這個更新針對`add_targets`功能進行了修復和介面調整。新增了一個`add_targets`方法，用於向圖像轉換中添加額外的目標。同時修復了介面問題，增加了對衝突目標名稱的測試案例。此外，對轉換的一致性和關鍵點處理的驗證也得到了改進。
-
-
-
-2. **PR #1646 - Moved ShiftScaleRotate to deprecated**：
-
-   這個更新將`ShiftScaleRotate`功能標記為過時，並進行了相應的調整。主要針對舊有功能進行調整和優化，同時標記了`ShiftScaleRotate`功能的過時。這可能是因為該功能已有更好的替代方案或不再建議使用。
+   這次修復解決了Albumentations庫中隨機網格洗牌功能的問題，並已合併並推送至主分支。修復包括新增對`generate_shuffled_splits`函數的測試，並新增了處理不可整除網格的功能。
 
 
 
-這些更新顯示了Albumentations 專案團隊對於代碼品質、功能改進和用戶需求的關注，以及持續努力改進和發展專案的決心。這些更新將有助於提高專案的性能、可靠性，同時為用戶提供更好的使用體驗。
+這些更新突顯了Albumentations團隊在持續改進和優化其圖像增強庫的過程中所做的努力。從性能優化到錯誤修復，再到測試擴展，每個更新都旨在確保庫的穩定性和功能性。這些努力將為用戶提供更好的使用體驗，並為Albumentations的未來發展奠定穩固基礎。
 
 
 
