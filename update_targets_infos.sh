@@ -12,7 +12,7 @@ news_dir="$targ_dir/docs/gmailsummary/news/$current_date"
 mkdir -p "$log_dir" "$news_dir"
 
 # 指定項目名稱列表
-project_names=("albumentations") # "onnxruntime" "pytorch-lightning" "BentoML" "docusaurus"
+project_names=("albumentations" "onnxruntime" "pytorch-lightning" "BentoML" "docusaurus")
 
 for project_name in "${project_names[@]}"; do
     log_file="$log_dir/$project_name-log-$current_date.txt"
@@ -26,7 +26,6 @@ for project_name in "${project_names[@]}"; do
         $pyenv_path main.py --project_name $project_name --time_length 1
         mv "$origin_dir/$file_name" "$project_path"
         git -C "$targ_dir" add "$project_path/$file_name"
-        git -C "$targ_dir" commit -m "[C] Update $project_name report for $current_date"
         echo "Script finished for $project_name at $(date)"
     } >> "$log_file" 2>&1
 
@@ -38,5 +37,6 @@ done
 
 # 推送 Git 變更
 {
+    git -C "$targ_dir" commit -m "[C] Update project report for $current_date"
     git -C "$targ_dir" push
 } >> "$log_file" 2>&1
