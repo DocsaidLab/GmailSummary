@@ -1,19 +1,16 @@
 from argparse import ArgumentParser
 from datetime import datetime, timedelta
 
-from get_messages import get_messages
-from google.oauth2.credentials import Credentials
-from googleapiclient.discovery import build
+from gmail_api import build_service, get_messages, parse_message
 from openai_api import chatgpt_summary
-from parse_message import parse_message
 from tqdm import tqdm
 
 
 def generate_markdown_report(input_text, project_name, date):
-    title = f"{project_name} 更新報告 - {date}"
+    title = f"{project_name}"
     markdown_text = input_text.replace('\n', '\n\n')
-    markdown_content = f"# {title}\n\n{markdown_text}"
-    file_name = f"{project_name}-update-{date}.md"
+    markdown_content = f"# {title}\n\n## {date} 彙整報告\n\n{markdown_text}"
+    file_name = f"{project_name}.md"
     with open(file_name, "w", encoding="utf-8") as file:
         file.write(markdown_content)
     return file_name
@@ -25,17 +22,7 @@ def main(project_name, time_length):
     after_date = current_date - timedelta(days=time_length)
     after_date = after_date.strftime('%Y/%m/%d')
 
-    # 載入認證並創建 GmailAPI 客戶端
-    creds = None
-
-    # token.json 存儲了用戶的訪問令牌和刷新令牌，並在訪問令牌到期時自動刷新
-    token_file = 'token.json'
-    creds = Credentials.from_authorized_user_file(
-        token_file, scopes=['https://www.googleapis.com/auth/gmail.readonly'])
-
-    # 建立 GmailAPI 客戶端
-    service = build('gmail', 'v1', credentials=creds)
-
+    service = build_service()
     messages = get_messages(
         service,
         after_date=after_date,
@@ -49,7 +36,7 @@ def main(project_name, time_length):
 
     # 調用 OpenAI API
     summary = chatgpt_summary(results)
-    summary = f'{summary}\n\n---\n\n以上報告由 OpenAI GPT-3.5 Turbo 模型自動生成。'
+    summary = f'{summary}\n\n---\n\n本日共彙整郵件： {len(results)} 封\n\n以上報告由 OpenAI GPT-3.5 Turbo 模型自動生成。'
 
     # 生成 Markdown 報告
     markdown_file = generate_markdown_report(
