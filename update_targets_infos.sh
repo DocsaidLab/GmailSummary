@@ -37,3 +37,7 @@ done
 
 git -C "$targ_dir" commit -m "[C] Update project report for $current_date"
 git -C "$targ_dir" push
+
+# Run docsearch scraper
+cd $targ_dir
+bash update_docsearch.sh
