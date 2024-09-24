@@ -25,4 +25,4 @@
 
 ## 快速開始
 
-套件安裝和使用的方式，請參閱 [**GmailSummary Documents**](https://docsaid.org/docs/gmailsummary/intro)。
+套件安裝和使用的方式，請參閱 [**GmailSummary Documents**](https://docsaid.org/docs/gmailsummary)。

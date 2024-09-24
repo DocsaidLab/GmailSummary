@@ -25,4 +25,4 @@ Therefore, as engineers seeking efficiency (or perhaps a bit of laziness), we mu
 
 ## Quick Start
 
-For information on package installation and usage, please refer to [**GmailSummary Documents**](https://docsaid.org/en/docs/gmailsummary/intro).
+For information on package installation and usage, please refer to [**GmailSummary Documents**](https://docsaid.org/en/docs/gmailsummary).
